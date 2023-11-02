@@ -1,6 +1,6 @@
 vim.wo.number = true
 vim.wo.relativenumber = true
-
+-- vim.opt.colorcolumn = "79"
 vim.g.did_load_filetypes = 1
 vim.g.formatoptions = "qrn1"
 vim.opt.showmode = false
@@ -15,7 +15,7 @@ vim.opt.shell = "/bin/zsh"
 vim.g.noswapfile = true 
 
 -- Mouse
-vim.opt.mouse = "a"
+vim.opt.mouse = ''   --"a"
 vim.opt.mousefocus = true
 
 -- Line Numbers
