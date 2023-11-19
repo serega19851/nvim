@@ -11,9 +11,10 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     {
         'nvim-telescope/telescope.nvim',
-        tag = '0.1.1',
+        tag = '0.1.4',
         dependencies = {'nvim-lua/plenary.nvim'}
-    }, {'cooperuser/glowbeam.nvim'}, {'joshdick/onedark.vim'},
+    },
+    {'cooperuser/glowbeam.nvim'}, {'joshdick/onedark.vim'},
     {'rebelot/kanagawa.nvim'},
     {'nvim-treesitter/nvim-treesitter'}, {'neovim/nvim-lspconfig'},
     {'hrsh7th/cmp-nvim-lsp'}, {'hrsh7th/cmp-buffer'}, {'hrsh7th/cmp-path'},
