@@ -1,8 +1,8 @@
 local opt = vim.opt
 
 -- Session Management
-opt.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+--
 -- Line Numbers
 opt.relativenumber = true
 opt.number = true
@@ -13,9 +13,15 @@ opt.shiftwidth = 2
 opt.expandtab = true
 opt.autoindent = true
 vim.bo.softtabstop = 2
+vim.g.noswapfile = true
+vim.opt.shell = "/bin/zsh"
+
+vim.cmd('syntax on')
+
+vim.opt.termguicolors = true
 
 -- Line Wrapping
-opt.wrap = false
+opt.wrap = true
 
 -- Search Settings
 opt.ignorecase = true
@@ -28,15 +34,15 @@ opt.cursorline = true
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
-vim.diagnostic.config {
-  float = { border = "rounded" }, -- add border to diagnostic popups
-}
+vim.diagnostic.config({
+	float = { border = "rounded" }, -- add border to diagnostic popups
+})
 
 -- Backspace
 opt.backspace = "indent,eol,start"
 
 -- Clipboard
-opt.clipboard:append("unnamedplus")
+opt.clipboard = "unnamedplus"
 
 -- Split Windows
 opt.splitright = true
@@ -53,3 +59,13 @@ opt.foldlevel = 20
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()" -- Utilize Treesitter folds
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+	pattern = "*",
+	callback = function()
+		if vim.fn.line("'\"") > 0 and vim.fn.line("'\"") <= vim.fn.line("$") then
+			vim.cmd('normal! g`"')
+		end
+	end,
+}) -- return to last edit position when opening files
+
+-- require("bufferline").setup({}) --bufferline
