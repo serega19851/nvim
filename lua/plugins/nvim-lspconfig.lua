@@ -61,6 +61,15 @@ return {
 
 		local lspconfig = require("lspconfig")
 		local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+		-- Проверка существования и инициализация workspace
+		lsp_capabilities.workspace = lsp_capabilities.workspace or {}
+
+		-- Добавляем поддержку отслеживания изменений файлов
+		lsp_capabilities.workspace.didChangeWatchedFiles = {
+			dynamicRegistration = true,
+		}
+
 		local lsp_attach = function(client, bufnr)
 			-- Create your keybindings here...
 		end

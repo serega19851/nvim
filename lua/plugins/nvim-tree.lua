@@ -14,6 +14,9 @@ return {
 				},
 			},
 		},
+	filters = {
+			custom = {'.pyc', '.pyo', '.pyd', '__pycache__'},  -- Скрываем .pyc, .pyo, .pyd файлы и __pycache__
+		},
 	},
 	config = function(_, opts)
 		-- Recommended settings to disable default netrw file explorer
