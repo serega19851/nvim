@@ -5,4 +5,10 @@ return {
   event = 'VeryLazy',
 }
 
+-- gcc - строка комен.
+-- gc - выдеделение строк и комен.
+-- gcap - обзац комент
+-- :7,17Commentar
+-- :global invocation like with
+-- :g/TODO/Commentary
 

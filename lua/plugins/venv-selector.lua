@@ -1,18 +1,21 @@
 return {
   {
     "linux-cultist/venv-selector.nvim",
-      dependencies = {
-        "neovim/nvim-lspconfig",
-        "mfussenegger/nvim-dap", "mfussenegger/nvim-dap-python", --optional
-        { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
-      },
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "mfussenegger/nvim-dap", "mfussenegger/nvim-dap-python", --опционально
+      { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
+    },
     lazy = false,
-    branch = "regexp", -- This is the regexp branch, use this for the new version
+    branch = "regexp", -- Это версия с регулярными выражениями, используйте её для новой версии плагина
     config = function()
-        require("venv-selector").setup()
-      end,
-      keys = {
-        { ",v", "<cmd>VenvSelect<cr>" },
-      },
+      -- Настройка плагина с включённым отладочным режимом
+      require("venv-selector").setup({
+        debug = true,  -- Включение отладочного режима для использования логгера
+      })
+    end,
+    keys = {
+      { ",v", "<cmd>VenvSelect<cr>" },
+    },
   },
 }

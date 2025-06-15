@@ -8,20 +8,21 @@ keymap.set("i", "ii", "<ESC>") -- exit insert mode with ii
 keymap.set("n", "<leader>wq", ":wq<CR>") -- save and quit
 keymap.set("n", "<leader>qq", ":q!<CR>") -- quit without saving
 keymap.set("n", "<leader>ww", ":w<CR>") -- save
-keymap.set("n", "gx", ":!open <c-r><c-a><CR>") -- open URL under cursor
+keymap.set("n", "<leader>gx", ":!xdg-open <c-r><c-a><CR>") -- open URL under cursor
 
 -- Split window management
 keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
 keymap.set("n", "<leader>sh", "<C-w>s") -- split window horizontally
 keymap.set("n", "<leader>se", "<C-w>=") -- make split windows equal width
 keymap.set("n", "<leader>sx", ":close<CR>") -- close split window
-keymap.set("n", "<leader>sj", "<C-w>-") -- make split window height shorter
-keymap.set("n", "<leader>sk", "<C-w>+") -- make split windows height taller
+keymap.set("n", "<leader>sj", "<C-w>-5") -- make split window height shorter
+keymap.set("n", "<leader>sk", "<C-w>+5") -- make split windows height taller
 keymap.set("n", "<leader>sl", "<C-w>>5") -- make split windows width bigger
 keymap.set("n", "<leader>sh", "<C-w><5") -- make split windows width smaller
 
 -- Tab management
-keymap.set("n", "<leader>to", ":tabnew<CR>") -- open a new tab
+-- keymap.set("n", "<leader>to", ":tabnew<CR>") -- open a new tab
+keymap.set("n", "<leader>to", ":tabnew <C-r>=input('Filename: ')<CR><CR>")
 keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close a tab
 keymap.set("n", "<leader>tn", ":tabn<CR>") -- next tab
 keymap.set("n", "<leader>tp", ":tabp<CR>") -- previous tab
@@ -34,7 +35,7 @@ keymap.set("n", "<leader>cn", "]c") -- next diff hunk
 keymap.set("n", "<leader>cp", "[c") -- previous diff hunk
 
 -- Vim-maximizer
-keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle maximize tab
+-- keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle maximize tab
 
 -- Nvim-tree
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
@@ -56,7 +57,7 @@ keymap.set("n", "<leader>fm", function()
 end)
 
 -- Git-blame
-keymap.set("n", "<leader>gb", ":GitBlameToggle<CR>") -- toggle git blame
+-- keymap.set("n", "<leader>gb", ":GitBlameToggle<CR>") -- toggle git blame
 
 -- buffers
 keymap.set("n", "<leader>n", ":bn<cr>")
@@ -67,7 +68,6 @@ keymap.set("n", "<leader>x", ":bd<cr>")
 keymap.set("n", "<leader>tf", ":ToggleTerm direction=float<CR>")
 keymap.set("n", "<leader>th", ":ToggleTerm direction=horizontal<CR>")
 keymap.set("n", "<leader>tv", ":ToggleTerm direction=vertical size=100<CR>")
-keymap.set("n", "<leader>tf", ":ToggleTerm direction=float<CR>")
 
 keymap.set("n", "<leader>,", ":nohlsearch<cr>")
 
@@ -92,6 +92,19 @@ keymap.set("n", "<leader>gn", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 keymap.set("n", "<leader>tr", "<cmd>lua vim.lsp.buf.document_symbol()<CR>")
 keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.buf.completion()<CR>")
 
+
+-- оборорачивает в парные символы когда слово выделено.
+keymap.set("v", "<leader>z'", "c'<C-r>\"'<Esc>", { noremap = true, silent = true })
+keymap.set("v", '<leader>z"', 'c"<C-r>""<Esc>', { noremap = true, silent = true })
+keymap.set("v", "<leader>z(", "c(<C-r>\")<Esc>", { noremap = true, silent = true })
+keymap.set("v", "<leader>z[", "c[<C-r>\"]<Esc>", { noremap = true, silent = true })
+keymap.set("v", "<leader>z{", "c{<C-r>\"}<Esc>", { noremap = true, silent = true })
+
+
+
+
+
+
 -- Filetype-specific keymaps (these can be done in the ftplugin directory instead if you prefer)
 keymap.set("n", "<leader>go", function()
 	if vim.bo.filetype == "python" then
@@ -103,3 +116,8 @@ end)
 vim.keymap.set("n", "<leader>bl", ":silent !black %<cr>")
 -- flake8 python formatting
 vim.keymap.set("n", "<leader>fl8", ":!flake8 %<cr>")
+
+
+
+-- nvim-dap.lua
+-- python -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 -m uvicorn main:app  так запускается фаст апи через дебаг пай и примерно такой же принцип и в джанго 
