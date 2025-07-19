@@ -12,13 +12,14 @@ keymap.set("n", "<leader>gx", ":!xdg-open <c-r><c-a><CR>") -- open URL under cur
 
 -- Split window management
 keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
-keymap.set("n", "<leader>sh", "<C-w>s") -- split window horizontally
+keymap.set("n", "<leader>sg", "<C-w>s") -- split window horizontally
 keymap.set("n", "<leader>se", "<C-w>=") -- make split windows equal width
 keymap.set("n", "<leader>sx", ":close<CR>") -- close split window
-keymap.set("n", "<leader>sj", "<C-w>-5") -- make split window height shorter
-keymap.set("n", "<leader>sk", "<C-w>+5") -- make split windows height taller
-keymap.set("n", "<leader>sl", "<C-w>>5") -- make split windows width bigger
-keymap.set("n", "<leader>sh", "<C-w><5") -- make split windows width smaller
+
+keymap.set("n", "<leader>sk", "<C-w>-5") -- make split window height shorter
+keymap.set("n", "<leader>sj", "<C-w>+5") -- make split windows height taller
+keymap.set("n", "<leader>sh", "<C-w>>5") -- make split windows width bigger
+keymap.set("n", "<leader>sl", "<C-w><5") -- make split windows width smaller
 
 -- Tab management
 -- keymap.set("n", "<leader>to", ":tabnew<CR>") -- open a new tab
@@ -44,9 +45,9 @@ keymap.set("n", "<leader>ef", ":NvimTreeFindFile<CR>") -- find file in file expl
 
 -- Telescope
 keymap.set("n", "<leader>ff", function()require("telescope.builtin").find_files({ hidden = true })end, {})
--- keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
-keymap.set("n", "<leader>fg", function()require("telescope.builtin").live_grep({ hidden = true })end, {})
-keymap.set("n", "<leader>fg", require("telescope.builtin").live_grep, {})
+keymap.set("n", "<leader>fg", function()
+  require("telescope.builtin").live_grep({ hidden = true })
+end, { desc = "Live grep (including hidden)" })
 keymap.set("n", "<leader>fb", require("telescope.builtin").buffers, {})
 keymap.set("n", "<leader>fh", require("telescope.builtin").help_tags, {})
 keymap.set("n", "<leader>fs", require("telescope.builtin").current_buffer_fuzzy_find, {})
@@ -90,8 +91,9 @@ keymap.set("n", "<leader>gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
 keymap.set("n", "<leader>gp", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
 keymap.set("n", "<leader>gn", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 keymap.set("n", "<leader>tr", "<cmd>lua vim.lsp.buf.document_symbol()<CR>")
-keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.buf.completion()<CR>")
-
+keymap.set("i", "<C-Space>", function()
+  require('cmp').complete()
+end, { desc = "Trigger completion menu" })
 
 -- оборорачивает в парные символы когда слово выделено.
 keymap.set("v", "<leader>z'", "c'<C-r>\"'<Esc>", { noremap = true, silent = true })

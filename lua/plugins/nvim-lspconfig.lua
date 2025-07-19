@@ -24,8 +24,39 @@ return {
 		{ "folke/neodev.nvim" },
 	},
 	config = function()
+		-- Initialize Mason before everything else
 		require("mason").setup()
-		require("mason-lspconfig").setup({
+
+		local mason_lspconfig = require("mason-lspconfig")
+		local lspconfig = require("lspconfig")
+		local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+		-- Basic LSP setup
+		local lsp_attach = function(client, bufnr)
+			-- Create your keybindings here...
+		end
+
+		-- Default config for all LSP servers
+    local default_config = {
+      on_attach = lsp_attach,
+      capabilities = lsp_capabilities,
+      handlers = {
+        ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
+        ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+      }
+    }
+
+    -- Единые настройки для всех диагностик
+    vim.diagnostic.config({
+      underline = false,
+      virtual_text = false,
+      signs = true,
+      update_in_insert = false,
+      float = { border = "rounded" }
+    })
+
+		-- Setup Mason-LSPConfig
+		mason_lspconfig.setup({
 			-- Install these LSPs automatically
 			ensure_installed = {
 				"bashls",
@@ -43,6 +74,7 @@ return {
 			},
 		})
 
+		-- Setup Mason-Tool-Installer
 		require("mason-tool-installer").setup({
 			-- Install these linters, formatters, debuggers automatically
 			ensure_installed = {
@@ -55,58 +87,33 @@ return {
 			},
 		})
 
-		-- There is an issue with mason-tools-installer running with VeryLazy, since it triggers on VimEnter which has already occurred prior to this plugin loading so we need to call install explicitly
-		-- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim/issues/39
+		-- There is an issue with mason-tools-installer running with VeryLazy
 		vim.api.nvim_command("MasonToolsInstall")
 
-		local lspconfig = require("lspconfig")
-		local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
+		-- Setup LSP servers
+		local setup_server = function(server_name)
+			local config = vim.deepcopy(default_config)
 
-		-- -- Проверка существования и инициализация workspace
-		-- lsp_capabilities.workspace = lsp_capabilities.workspace or {}
+			-- Special configuration for specific servers
+			if server_name == "lua_ls" then
+				config.settings = {
+					Lua = {
+						diagnostics = {
+							-- Get the language server to recognize the `vim` global
+							globals = { "vim" },
+						},
+					},
+				}
+			end
 
-		-- -- Добавляем поддержку отслеживания изменений файлов
-		-- lsp_capabilities.workspace.didChangeWatchedFiles = {
-		-- 	dynamicRegistration = true,
-		-- }
-
-		local lsp_attach = function(client, bufnr)
-			-- Create your keybindings here...
+			lspconfig[server_name].setup(config)
 		end
 
-		-- Call setup on each LSP server
-		require("mason-lspconfig").setup_handlers({
-			function(server_name)
-				lspconfig[server_name].setup({
-					on_attach = lsp_attach,
-					capabilities = lsp_capabilities,
-					handlers = {
-						-- Add borders to LSP popups
-						["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" }),
-						["textDocument/signatureHelp"] = vim.lsp.with(
-							vim.lsp.handlers.signature_help,
-							{ border = "rounded" }
-						),
-						-- Отключение подчеркивания для диагностических сообщений LSP
-						["textDocument/publishDiagnostics"] = vim.lsp.with(
-							vim.lsp.diagnostic.on_publish_diagnostics,
-							{ virtual_text = false, underline = false }
-						),
-					},
-				})
-			end,
-		})
-
-		-- Lua LSP settings
-		lspconfig.lua_ls.setup({
-			settings = {
-				Lua = {
-					diagnostics = {
-						-- Get the language server to recognize the `vim` global
-						globals = { "vim" },
-					},
-				},
-			},
-		})
+		-- Get list of installed servers and set them up
+		local installed_servers = mason_lspconfig.get_installed_servers()
+		
+		for _, server in ipairs(installed_servers) do
+			setup_server(server)
+		end
 	end,
 }
