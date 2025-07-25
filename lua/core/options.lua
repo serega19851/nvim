@@ -34,9 +34,9 @@ opt.cursorline = true
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
-vim.diagnostic.config({
-	float = { border = "rounded" }, -- add border to diagnostic popups
-})
+-- vim.diagnostic.config({
+-- 	float = { border = "rounded" }, -- add border to diagnostic popups
+-- })
 
 -- Backspace
 opt.backspace = "indent,eol,start"

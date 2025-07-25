@@ -31,6 +31,11 @@ return {
 		local lspconfig = require("lspconfig")
 		local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
+		-- Полностью блокируем автоматическую настройку pyright
+		lspconfig.pyright.setup = function() 
+			-- Блокируем автоматическую настройку, будем настраивать вручную
+		end
+
 		-- Basic LSP setup
 		local lsp_attach = function(client, bufnr)
 			-- Create your keybindings here...

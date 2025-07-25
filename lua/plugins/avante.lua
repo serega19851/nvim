@@ -27,19 +27,10 @@ return {
         -- api_key_name = "AVANTE_ANTHROPIC_API_KEY", -- Имя переменной окружения
         -- Указываем ключ напрямую:
         api_key = os.getenv("AVANTE_ANTHROPIC_API_KEY"),
-        extra_request_body = {
-          temperature = 0.75,
-          max_tokens = 20480,
-        },
-      },
-      moonshot = {
-        endpoint = "https://api.moonshot.ai/v1",
-        model = "kimi-k2-0711-preview",
-        timeout = 30000, -- Timeout in milliseconds
-        extra_request_body = {
-          temperature = 0.75,
-          max_tokens = 32768,
-        },
+          extra_request_body = {
+            temperature = 0.5,
+            max_tokens = 2000,
+          },
       },
     },
   },
