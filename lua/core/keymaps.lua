@@ -7,8 +7,10 @@ keymap.set("i", "jk", "<ESC>") -- exit insert mode with jk
 keymap.set("i", "ii", "<ESC>") -- exit insert mode with ii
 keymap.set("n", "<leader>wq", ":wq<CR>") -- save and quit
 keymap.set("n", "<leader>qq", ":q!<CR>") -- quit without saving
-keymap.set("n", "<leader>ww", ":w<CR>") -- save
-keymap.set("n", "<leader>gx", ":!xdg-open <c-r><c-a><CR>") -- open URL under cursor
+keymap.set("n", "<leader>ww", ":w!<CR>") -- save
+
+ -- open URL under cursor
+keymap.set("n", "<leader>gx", ":!xdg-open <c-r><c-a><CR>")
 
 -- Split window management
 keymap.set("n", "<leader>sv", "<C-w>v") -- split window vertically
@@ -22,7 +24,6 @@ keymap.set("n", "<leader>sh", "<C-w>>5") -- make split windows width bigger
 keymap.set("n", "<leader>sl", "<C-w><5") -- make split windows width smaller
 
 -- Tab management
--- keymap.set("n", "<leader>to", ":tabnew<CR>") -- open a new tab
 keymap.set("n", "<leader>to", ":tabnew <C-r>=input('Filename: ')<CR><CR>")
 keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close a tab
 keymap.set("n", "<leader>tn", ":tabn<CR>") -- next tab
@@ -34,9 +35,6 @@ keymap.set("n", "<leader>cj", ":diffget 1<CR>") -- get diff from left (local) du
 keymap.set("n", "<leader>ck", ":diffget 3<CR>") -- get diff from right (remote) during merge
 keymap.set("n", "<leader>cn", "]c") -- next diff hunk
 keymap.set("n", "<leader>cp", "[c") -- previous diff hunk
-
--- Vim-maximizer
--- keymap.set("n", "<leader>sm", ":MaximizerToggle<CR>") -- toggle maximize tab
 
 -- Nvim-tree
 keymap.set("n", "<leader>ee", ":NvimTreeToggle<CR>") -- toggle file explorer
@@ -57,19 +55,28 @@ keymap.set("n", "<leader>fm", function()
 	require("telescope.builtin").treesitter({ default_text = ":method:" })
 end)
 
--- Git-blame
--- keymap.set("n", "<leader>gb", ":GitBlameToggle<CR>") -- toggle git blame
-
 -- buffers
 keymap.set("n", "<leader>n", ":bn<cr>")
 keymap.set("n", "<leader>p", ":bp<cr>")
 keymap.set("n", "<leader>x", ":bd<cr>")
+keymap.set('n', '<Leader>1', '<Cmd>BufferLineGoToBuffer 1<CR>')
+keymap.set('n', '<Leader>2', '<Cmd>BufferLineGoToBuffer 2<CR>')
+keymap.set('n', '<Leader>3', '<Cmd>BufferLineGoToBuffer 3<CR>')
+keymap.set('n', '<Leader>4', '<Cmd>BufferLineGoToBuffer 4<CR>')
+keymap.set('n', '<Leader>5', '<Cmd>BufferLineGoToBuffer 5<CR>')
+keymap.set('n', '<Leader>6', '<Cmd>BufferLineGoToBuffer 6<CR>')
+keymap.set('n', '<Leader>7', '<Cmd>BufferLineGoToBuffer 7<CR>')
+keymap.set('n', '<Leader>8', '<Cmd>BufferLineGoToBuffer 8<CR>')
+keymap.set('n', '<Leader>9', '<Cmd>BufferLineGoToBuffer 9<CR>')
+keymap.set('n', '<Leader>bc', '<Cmd>BufferLineCloseOthers<CR>', { desc = 'Close other buffers' })
+
 
 -- Terminal
 keymap.set("n", "<leader>tf", ":ToggleTerm direction=float<CR>")
 keymap.set("n", "<leader>th", ":ToggleTerm direction=horizontal<CR>")
 keymap.set("n", "<leader>tv", ":ToggleTerm direction=vertical size=100<CR>")
 
+--nohlsearch
 keymap.set("n", "<leader>,", ":nohlsearch<cr>")
 
 -- markdown preview
@@ -95,6 +102,7 @@ keymap.set("i", "<C-Space>", function()
   require('cmp').complete()
 end, { desc = "Trigger completion menu" })
 
+
 -- оборорачивает в парные символы когда слово выделено.
 keymap.set("v", "<leader>z'", "c'<C-r>\"'<Esc>", { noremap = true, silent = true })
 keymap.set("v", '<leader>z"', 'c"<C-r>""<Esc>', { noremap = true, silent = true })
@@ -103,23 +111,23 @@ keymap.set("v", "<leader>z[", "c[<C-r>\"]<Esc>", { noremap = true, silent = true
 keymap.set("v", "<leader>z{", "c{<C-r>\"}<Esc>", { noremap = true, silent = true })
 
 
-
-
-
-
--- Filetype-specific keymaps (these can be done in the ftplugin directory instead if you prefer)
-keymap.set("n", "<leader>go", function()
-	if vim.bo.filetype == "python" then
-		vim.api.nvim_command("PyrightOrganizeImports")
-	end
+-- ruff
+-- Форматирование как black + сортировка импортов
+keymap.set('n', '<leader>rf', function()
+    local filename = vim.fn.expand('%')
+    -- Сначала сортировка импортов
+    os.execute('ruff check --select=I --fix ' .. filename)
+    -- Затем форматирование
+    os.execute('ruff format ' .. filename)
+    -- Обновляем буфер
+    vim.cmd('edit!')
+    print("✓ Ruff: formatted and sorted imports")
 end)
 
--- black python formatting
-vim.keymap.set("n", "<leader>bl", ":silent !black %<cr>")
--- flake8 python formatting
-vim.keymap.set("n", "<leader>fl8", ":!flake8 %<cr>")
-
-
+-- Только форматирование (как black)
+keymap.set('n', '<leader>bf', ':!ruff format %<CR> :edit!<CR>', { silent = true })
+-- Только сортировка импортов
+keymap.set('n', '<leader>si', ':!ruff check --select=I --fix %<CR> :edit!<CR>', { silent = true })
 
 -- nvim-dap.lua
 -- python -Xfrozen_modules=off -m debugpy --listen 0.0.0.0:5678 -m uvicorn main:app  так запускается фаст апи через дебаг пай и примерно такой же принцип и в джанго 

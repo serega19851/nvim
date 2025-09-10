@@ -12,13 +12,18 @@ opt.tabstop = 2
 opt.shiftwidth = 2
 opt.expandtab = true
 opt.autoindent = true
-vim.bo.softtabstop = 2
-vim.g.noswapfile = true
-vim.opt.shell = "/bin/zsh"
+
+opt.softtabstop = 2
+
+opt.swapfile = false
+opt.backup = false
+opt.writebackup = true
+
+opt.shell = "/bin/zsh"
 
 vim.cmd('syntax on')
 
-vim.opt.termguicolors = true
+opt.termguicolors = true
 
 -- Line Wrapping
 opt.wrap = true
